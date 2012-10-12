@@ -1,5 +1,6 @@
 package cucumber.runtime.java;
 
+
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.Order;
@@ -90,7 +91,11 @@ public class JavaBackend implements Backend {
     void addStepDefinition(Annotation annotation, Method method) {
         try {
             objectFactory.addClass(method.getDeclaringClass());
-            glue.addStepDefinition(new JavaStepDefinition(method, pattern(annotation), timeout(annotation), objectFactory));
+            
+            String featureScopeURI = null;
+            if (method.getDeclaringClass().getAnnotation(cucumber.api.java.FeatureScope.class) != null) 
+            	featureScopeURI = (String) Utils.invoke( method.getDeclaringClass().getAnnotation(cucumber.api.java.FeatureScope.class),  cucumber.api.java.FeatureScope.class.getMethod("value"),0); 
+            glue.addStepDefinition(new JavaStepDefinition(method, pattern(annotation),featureScopeURI, timeout(annotation), objectFactory));
         } catch (DuplicateStepDefinitionException e) {
             throw e;
         } catch (Throwable e) {

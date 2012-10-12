@@ -4,11 +4,16 @@ import gherkin.I18n;
 import gherkin.formatter.Argument;
 import gherkin.formatter.model.Step;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public interface StepDefinition {
-    /**
+
+	Method getMethod() ;
+	String getFeatureScopeURI();
+	
+	/**
      * Returns a list of arguments. Return null if the step definition
      * doesn't match at all. Return an empty List if it matches with 0 arguments
      * and bigger sizes if it matches several.
@@ -31,7 +36,7 @@ public interface StepDefinition {
     /**
      * The parameter type at index n. A hint about the raw parameter type is passed to make
      * it easier for the implementation to make a guess based on runtime information.
-     * <p/>
+     *
      * Statically typed languages will typically ignore the {@code argumentType} while dynamically
      * typed ones will use it to infer a "good type". It's also ok to return null.
      */
@@ -42,6 +47,7 @@ public interface StepDefinition {
      * if the invocation fails, which will cause the step to fail.
      */
     void execute(I18n i18n, Object[] args) throws Throwable;
+
 
     /**
      * Return true if this matches the location. This is used to filter

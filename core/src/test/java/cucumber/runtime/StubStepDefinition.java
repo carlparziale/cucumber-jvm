@@ -11,6 +11,7 @@ import java.util.List;
 public class StubStepDefinition implements StepDefinition {
     private final Object target;
     private final Method method;
+    private final String featureScopeURI = "";
     private final String pattern;
     private List<ParameterType> parameterTypes;
 
@@ -30,7 +31,12 @@ public class StubStepDefinition implements StepDefinition {
     public String getLocation(boolean detail) {
         return method.getName();
     }
-
+    public Method getMethod(){
+    	return this.method;
+    }
+    public String getFeatureScopeURI(){
+    	return this.featureScopeURI;
+    }
     @Override
     public Integer getParameterCount() {
         return parameterTypes.size();

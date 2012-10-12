@@ -21,14 +21,16 @@ class JavaStepDefinition implements StepDefinition {
     private final JdkPatternArgumentMatcher argumentMatcher;
     private final ObjectFactory objectFactory;
     private List<ParameterType> parameterTypes;
+    private final String featureScopeURI;
 
-    public JavaStepDefinition(Method method, Pattern pattern, int timeout, ObjectFactory objectFactory) {
+    public JavaStepDefinition(Method method, Pattern pattern, String featureScopeURI, int timeout, ObjectFactory objectFactory) {
         this.method = method;
         this.parameterTypes = ParameterType.fromMethod(method);
         this.pattern = pattern;
         this.argumentMatcher = new JdkPatternArgumentMatcher(pattern);
         this.timeout = timeout;
         this.objectFactory = objectFactory;
+        this.featureScopeURI = featureScopeURI;
     }
 
     public void execute(I18n i18n, Object[] args) throws Throwable {
@@ -53,7 +55,10 @@ class JavaStepDefinition implements StepDefinition {
     public ParameterType getParameterType(int n, Type argumentType) {
         return parameterTypes.get(n);
     }
-
+ 
+    public Method getMethod(){
+    	return this.method;
+    }
     public boolean isDefinedAt(StackTraceElement e) {
         return e.getClassName().equals(method.getDeclaringClass().getName()) && e.getMethodName().equals(method.getName());
     }
@@ -62,4 +67,8 @@ class JavaStepDefinition implements StepDefinition {
     public String getPattern() {
         return pattern.pattern();
     }
+
+	public String getFeatureScopeURI() {
+		return featureScopeURI;
+	}
 }
